@@ -26,9 +26,9 @@ router.get('/shops/:shopId', async (req, res) => {
         const shop = await Shop.findById(shopId)
 
         /** GET Products Of Shop */
-        const productsOfShop = await Products.find({
-            shop_id: shop._id
-        })
+        let productsOfShop = await Products.find({
+            shop_id: shop._id,
+        }).populate('shop_id', 'recipient_id')
 
         res.json({
             error: false,

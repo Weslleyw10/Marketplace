@@ -9,10 +9,10 @@ import Dock from 'react-dock'
 import Product from '../../Components/Product/List'
 
 const Sidebar = () => {
-    const [opened, setOpened] = useState(false)
     const { cart } = useSelector(state => state.shop)
-
     const history = useHistory()
+    
+    const [opened, setOpened] = useState(false)
 
     useEffect(() => {
         window.addEventListener('openCart', () => {
@@ -52,19 +52,14 @@ const Sidebar = () => {
                     
                     <button
                     className="btn btn-block btn-lg btn-primary rounded-0 h-50 align-items-center"
-                    onClick={() => history.push('/checkout')}
+                    onClick={() => history.push('/register')}
                     >
                         Finalizar Compra
                     </button>
                 </div>
-
-
             </div>
-
         </Dock>
     )
-
-
 }
 
 export default Sidebar

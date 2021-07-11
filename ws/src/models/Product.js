@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 const Product = new Schema({
     shop_id: {
         type: Schema.Types.ObjectId,
-        model: 'Shop'
+        ref: 'Shop'
     },
     nome: String,
     capa: String,

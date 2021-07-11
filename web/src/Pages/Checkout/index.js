@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 import dayjs from 'dayjs'
 import _ from 'underscore'
+
+import { setTransaction as setTransactionAction, makePurchase } from '../../store/modules/Shop/actions'
 
 import Header from '../../Components/Header'
 import Product from '../../Components/Product/List'
@@ -10,7 +12,9 @@ import './style.css'
 
 
 const Checkout = () => {
-    const { cart } = useSelector(state => state.shop)
+    const dispatch = useDispatch()
+
+    const { cart, transactionFee, defaultRecipient } = useSelector(state => state.shop)
 
     const [transaction, setTransaction] = useState({
         amount: 0,
@@ -41,7 +45,6 @@ const Checkout = () => {
         return total + Number(product.preco)
     }, 0)
 
-
     const setShippingValue = (key, value) => {
         setTransaction({
             ...transaction,
@@ -53,14 +56,52 @@ const Checkout = () => {
                 }
             }
         })
+    }
+
+    const splitRulesHandle = () => {
+        const productsByShop = _.groupBy(cart, (product) => product.shop_id.recipient_id)
+
+        let result = []
+
+        Object.keys(productsByShop).map(shop => {
+            const products = productsByShop[shop]
+
+            let totalValuePerShop = products.reduce((total, product) => {
+                return total + Number(product.preco)
+            }, 0).toFixed(2)
+
+            const totalFee = (totalValuePerShop * transactionFee).toFixed(2)
+
+            result.push({
+                recipient_id: products[0].shop_id.recipient_id,
+                percentage: Math.floor(((totalValuePerShop - totalFee) / total) * 100),
+                liable: true,
+                charge_processing_fee: true
+            })
+        })
+
+        const totalShopsPercentage = result.reduce((total, recipient) => {
+            return total + parseFloat(recipient.percentage)
+        }, 0)
+
+        result.push({
+            ...defaultRecipient,
+            percentage: 100 - totalShopsPercentage
+        })
+
+
+        return result
+
 
     }
 
     const purchaseHandle = () => {
         console.log('TRANSACTION', transaction)
+        dispatch(setTransactionAction(transaction))
+        setTimeout(() => {
+            dispatch(makePurchase())
+        }, 100)
     }
-
-    const splitRulesHandle = () => {}
 
     useEffect(() => {
         setTransaction({
@@ -186,13 +227,13 @@ const Checkout = () => {
                         <div className="row mb-3">
                             <div className="col-9">
                                 <input
-                                    type="date"
+                                    type="text"
                                     placeholder="Validade"
                                     className="form-control form-control-lg"
                                     name="validate"
                                     onChange={(e) =>
                                         setTransaction({
-                                            ...transaction, card_expiration_date: dayjs(e.target.value).format('MMYY')
+                                            ...transaction, card_expiration_date: e.target.value
                                         })
                                     }
                                 />
@@ -232,7 +273,7 @@ const Checkout = () => {
                             <div className="row products">
                                 {
                                     cart.map(product => (
-                                        <Product data={product} />
+                                        <Product key={product._id} data={product} />
                                     ))
                                 }
                             </div>

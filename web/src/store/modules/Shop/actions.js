@@ -53,3 +53,15 @@ export function toggleCartProduct(product) {
     }
 }
 
+export function setTransaction(transaction) {
+    return {
+        type: types.SET_TRANSACTION,
+        transaction
+    }
+}
+
+export function makePurchase() {
+    return {
+        type: types.MAKE_PURCHASE,
+    }
+}

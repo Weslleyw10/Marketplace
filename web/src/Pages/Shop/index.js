@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 
 import { requestShop } from '../../store/modules/Shop/actions'
 
@@ -11,8 +11,6 @@ import Header from '../../Components/Header'
 import ProductCard from '../../Components/Product/Card'
 
 const Shop = ({ match }) => {
-    let arr = [1,2,3,4,5,6,7,8]
-
     const dispatch = useDispatch()
     const { shop } = useSelector(state => state.shop)
 

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 import utils from '../../utils'
 
 import illustration from '../../Assets/illustration.png'
@@ -25,7 +26,6 @@ const Register = () => {
 			}
 		],
 		phone_numbers: [
-			"+55",
 			"+55"
 		],
 		phone_numbers: "1965-01-01"
@@ -43,7 +43,6 @@ const Register = () => {
             />
 
             <div className="row">
-
                 <div className="col-6 my-auto text-right">
                     <img className="img-fluid" src={illustration} title="" alt="" />
                 </div>
@@ -64,7 +63,7 @@ const Register = () => {
                             name="phone"
                             className="form-control form-control-lg mb-3"
                             placeholder="Telefone"
-                            onChange={e => setCustomer({ ...customer, phone_numbers: e.target.value })}
+                            onChange={e => setCustomer({ ...customer, phone_numbers: [e.target.value] })}
                         />
                         <input
                             type="email"
@@ -80,7 +79,9 @@ const Register = () => {
                             placeholder="CPF"
                             onChange={e => setCustomer({ 
                                 ...customer, 
-                                documents: { type: 'cpf', number: utils.removeCharacteresCPF(e.target.value) }
+                                documents: [
+                                    { type: 'cpf', number: utils.removeCharacteresCPF(e.target.value) }
+                                ]
                             })}
                         />
                         <input
@@ -91,9 +92,12 @@ const Register = () => {
                             onChange={e => setCustomer({ ...customer, birthday: e.target.value })}
                         />
 
-                        <button onClick={setCustomerHandle()} className="btn btn-lg btn-block btn-secondary">
+                        <Link
+                        to="/checkout" 
+                        onClick={setCustomerHandle()} 
+                        className="btn btn-lg btn-block btn-secondary">
                             Finalizar Pedido
-                        </button>
+                        </Link>
 
                     </div>
                 </div>

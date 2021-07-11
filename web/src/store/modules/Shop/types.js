@@ -7,7 +7,9 @@ const types = {
     SET_MAP_CENTER: '@shop/set_map_center',
     REQUEST_SHOP: '@shop/request_shop',
     SET_SHOP: '@shop/set_shop',
-    TOGGLE_CART_PRODUCT: '@shop/toggle_cart_product'
+    TOGGLE_CART_PRODUCT: '@shop/toggle_cart_product',
+    SET_TRANSACTION: '@shop/set_transaction',
+    MAKE_PURCHASE: '@shop/make_purchase',
 }
 
 export default types
