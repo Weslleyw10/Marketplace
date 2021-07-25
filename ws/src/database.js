@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const URI = 'mongodb://localhost/shops'
+const URI = process.env.MONGO_URL
 
 mongoose.set('useNewUrlParser', true)
 mongoose.set('useFindAndModify', false)
